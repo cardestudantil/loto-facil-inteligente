@@ -101,16 +101,28 @@ input{
     overflow-wrap:anywhere;
 }
 
+
+/* =========================
+   FREQUÊNCIA DOS NÚMEROS
+========================= */
+
+#frequencia{
+    margin-top:15px;
+}
+
 .tag{
-    display:block;
-    width:max-content;
+    display:inline-block;
+    width:auto;
     background:#334155;
     color:#ffffff;
     border-radius:8px;
     padding:7px 10px;
-    margin:6px 0;
+    margin:4px;
     font-size:14px;
+    line-height:1.4;
+    white-space:nowrap;
 }
+
 
 .resultado-numeros{
     display:grid;
@@ -985,17 +997,11 @@ async function copiarResultadoReal(){
         .join(', ');
 
 
-    /* COLOCA AUTOMATICAMENTE
-       NO CAMPO DE CONFERÊNCIA */
-
     const campoResultado =
         document.getElementById('resultado');
 
     campoResultado.value = texto;
 
-
-    /* TENTA COPIAR PARA A ÁREA
-       DE TRANSFERÊNCIA */
 
     try{
 
@@ -1028,15 +1034,12 @@ async function copiarResultadoReal(){
 
         catch(e){
 
-            /* Mesmo que copiar seja bloqueado,
-               o campo de conferência já foi preenchido. */
+            /* O campo já foi preenchido. */
 
         }
 
     }
 
-
-    /* LEVA A TELA ATÉ O CAMPO */
 
     campoResultado.scrollIntoView({
         behavior:'smooth',
