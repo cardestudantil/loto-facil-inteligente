@@ -1,161 +1,932 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
+
 <title>Loto Fácil Inteligente</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#101827;color:#f8fafc;padding:20px}
-main{max-width:760px;margin:auto}
-header{text-align:center;padding:18px 0}
-h1{color:#5ee6a8;margin-bottom:8px}
-.card{background:#1d293b;padding:18px;border-radius:15px;margin:16px 0}
-.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:18px 0}
-.num{border:0;border-radius:50%;aspect-ratio:1;background:#334155;color:white;font-size:17px;font-weight:bold;cursor:pointer}
-.num.selected{background:#16a36a;color:white}
-button.action{background:#16a36a;color:white;border:0;padding:12px 15px;border-radius:9px;font-weight:bold;cursor:pointer;margin:4px 2px}
-button.secondary{background:#475569}
-input{background:#0f172a;color:white;border:1px solid #64748b;border-radius:8px;padding:12px;width:100%;margin:8px 0}
-.small{color:#cbd5e1;font-size:14px;line-height:1.5}
-.result{line-height:2;overflow-wrap:anywhere}
-.tag{display:inline-block;background:#334155;border-radius:8px;padding:5px 9px;margin:3px}
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#101827;
+    color:#f8fafc;
+    padding:20px;
+}
+
+main{
+    max-width:760px;
+    margin:auto;
+}
+
+header{
+    text-align:center;
+    padding:18px 0;
+}
+
+h1{
+    color:#5ee6a8;
+    margin-bottom:8px;
+}
+
+.card{
+    background:#1d293b;
+    padding:18px;
+    border-radius:15px;
+    margin:16px 0;
+}
+
+.numbers{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:9px;
+    margin:18px 0;
+}
+
+.num{
+    border:0;
+    border-radius:50%;
+    aspect-ratio:1;
+    background:#334155;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.num.selected{
+    background:#16a36a;
+    color:white;
+}
+
+button.action{
+    background:#16a36a;
+    color:white;
+    border:0;
+    padding:12px 15px;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:4px 2px;
+}
+
+button.secondary{
+    background:#475569;
+}
+
+input{
+    background:#0f172a;
+    color:white;
+    border:1px solid #64748b;
+    border-radius:8px;
+    padding:12px;
+    width:100%;
+    margin:8px 0;
+}
+
+.small{
+    color:#cbd5e1;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.result{
+    line-height:2;
+    overflow-wrap:anywhere;
+}
+
+.tag{
+    display:inline-block;
+    background:#334155;
+    border-radius:8px;
+    padding:5px 9px;
+    margin:4px;
+}
+
+.resultado-numeros{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+    margin-top:15px;
+}
+
+.resultado-numero{
+    background:#16a36a;
+    border-radius:50%;
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:17px;
+}
+
+.status{
+    padding:10px;
+    border-radius:8px;
+    background:#0f172a;
+    margin-top:10px;
+}
+
+.loading{
+    color:#facc15;
+}
+
+.erro{
+    color:#fca5a5;
+}
+
+.sucesso{
+    color:#86efac;
+}
 </style>
 </head>
+
 <body>
+
 <main>
+
 <header>
-<h1>🍀 Loto Fácil Inteligente</h1>
-<p>Seus números, suas estatísticas, suas escolhas.</p>
+    <h1>🍀 Loto Fácil Inteligente</h1>
+    <p>Seus números, suas estatísticas, suas escolhas.</p>
 </header>
 
-<section class="card">
-<h2>🎯 Gerar jogo</h2>
-<p class="small">Escolha de 15 a 20 números entre 01 e 25.</p>
-<label for="quantidade">Quantidade de números</label>
-<input id="quantidade" type="number" min="15" max="20" value="15">
-<div id="grade" class="numbers"></div>
-<button class="action" onclick="gerar()">🎲 Gerar aleatório</button>
-<button class="action secondary" onclick="limpar()">Limpar seleção</button>
-<button class="action" onclick="salvar()">💾 Salvar jogo</button>
-<p id="contagem" class="small"></p>
-</section>
 
 <section class="card">
-<h2>💾 Meus jogos</h2>
-<div id="jogos" class="result">Nenhum jogo salvo ainda.</div>
+
+    <h2>🎯 Gerar jogo</h2>
+
+    <p class="small">
+        Escolha de 15 a 20 números entre 01 e 25.
+    </p>
+
+    <label for="quantidade">
+        Quantidade de números
+    </label>
+
+    <input
+        id="quantidade"
+        type="number"
+        min="15"
+        max="20"
+        value="15"
+    >
+
+    <div id="grade" class="numbers"></div>
+
+    <button class="action" onclick="gerar()">
+        🎲 Gerar aleatório
+    </button>
+
+    <button class="action secondary" onclick="limpar()">
+        Limpar seleção
+    </button>
+
+    <button class="action" onclick="salvar()">
+        💾 Salvar jogo
+    </button>
+
+    <p id="contagem" class="small"></p>
+
 </section>
 
-<section class="card">
-<h2>✅ Conferir resultado</h2>
-<p class="small">Digite os 15 números sorteados, separados por vírgula ou espaço.</p>
-<input id="resultado" placeholder="01, 02, 03, 04...">
-<button class="action" onclick="conferir()">Conferir meus jogos</button>
-<div id="conferencia" class="result"></div>
-</section>
 
 <section class="card">
-<h2>📊 Frequência dos números</h2>
-<p class="small">A estatística considera os resultados que você cadastrar abaixo.</p>
-<input id="historico" placeholder="Números de um sorteio: 01, 02, 03...">
-<button class="action" onclick="adicionarHistorico()">Adicionar resultado ao histórico</button>
-<div id="frequencia" class="result"></div>
+
+    <h2>💾 Meus jogos</h2>
+
+    <div id="jogos" class="result">
+        Nenhum jogo salvo ainda.
+    </div>
+
 </section>
+
+
+<section class="card">
+
+    <h2>✅ Conferir resultado</h2>
+
+    <p class="small">
+        Digite os 15 números sorteados, separados por vírgula ou espaço.
+    </p>
+
+    <input
+        id="resultado"
+        placeholder="01, 02, 03, 04..."
+    >
+
+    <button class="action" onclick="conferir()">
+        Conferir meus jogos
+    </button>
+
+    <div id="conferencia" class="result"></div>
+
+</section>
+
+
+<section class="card">
+
+    <h2>📊 Frequência dos números</h2>
+
+    <p class="small">
+        A estatística considera os resultados que você cadastrar abaixo.
+    </p>
+
+    <input
+        id="historico"
+        placeholder="Números de um sorteio: 01, 02, 03..."
+    >
+
+    <button
+        class="action"
+        onclick="adicionarHistorico()"
+    >
+        Adicionar resultado ao histórico
+    </button>
+
+    <div id="frequencia" class="result"></div>
+
+</section>
+
+
+<section class="card">
+
+    <h2>🎯 Último resultado da Lotofácil</h2>
+
+    <div id="resultadoReal" class="result">
+
+        <div class="loading">
+            🔄 Carregando resultado real...
+        </div>
+
+    </div>
+
+    <button
+        class="action"
+        onclick="carregarResultadoReal()"
+    >
+        🔄 Atualizar resultado
+    </button>
+
+</section>
+
 
 <footer class="small">
-<p>Ferramenta informativa. Os sorteios são aleatórios; estatísticas e combinações não garantem prêmios.</p>
+
+    <p>
+        Ferramenta informativa. Os sorteios são aleatórios;
+        estatísticas e combinações não garantem prêmios.
+    </p>
+
 </footer>
+
 </main>
 
+
 <script>
-const chaveJogos='lfi_jogos';
-const chaveHistorico='lfi_historico';
-let selecionados=[];
-let jogos=JSON.parse(localStorage.getItem(chaveJogos)||'[]');
-let historico=JSON.parse(localStorage.getItem(chaveHistorico)||'[]');
+
+const chaveJogos = 'lfi_jogos';
+const chaveHistorico = 'lfi_historico';
+
+let selecionados = [];
+
+let jogos = JSON.parse(
+    localStorage.getItem(chaveJogos) || '[]'
+);
+
+let historico = JSON.parse(
+    localStorage.getItem(chaveHistorico) || '[]'
+);
+
+
+/* =========================
+   GRADE DE NÚMEROS
+========================= */
 
 function montarGrade(){
- const grade=document.getElementById('grade');
- for(let n=1;n<=25;n++){
-  const b=document.createElement('button');
-  b.className='num';b.textContent=String(n).padStart(2,'0');
-  b.onclick=()=>alternar(n,b);grade.appendChild(b);
- }
- atualizarSelecao();
+
+    const grade = document.getElementById('grade');
+
+    grade.innerHTML = '';
+
+    for(let n = 1; n <= 25; n++){
+
+        const b = document.createElement('button');
+
+        b.className = 'num';
+
+        b.textContent =
+            String(n).padStart(2,'0');
+
+        b.onclick = () =>
+            alternar(n,b);
+
+        grade.appendChild(b);
+    }
+
+    atualizarSelecao();
 }
+
+
+/* =========================
+   SELECIONAR NÚMERO
+========================= */
+
 function alternar(n,b){
- if(selecionados.includes(n)){selecionados=selecionados.filter(x=>x!==n);b.classList.remove('selected')}
- else if(selecionados.length<20){selecionados.push(n);b.classList.add('selected')}
- else alert('Você pode selecionar no máximo 20 números.');
- atualizarSelecao();
+
+    if(selecionados.includes(n)){
+
+        selecionados =
+            selecionados.filter(
+                x => x !== n
+            );
+
+        b.classList.remove('selected');
+
+    }
+
+    else if(selecionados.length < 20){
+
+        selecionados.push(n);
+
+        b.classList.add('selected');
+
+    }
+
+    else{
+
+        alert(
+            'Você pode selecionar no máximo 20 números.'
+        );
+
+    }
+
+    atualizarSelecao();
 }
+
+
+/* =========================
+   ATUALIZAR CONTAGEM
+========================= */
+
 function atualizarSelecao(){
- document.querySelectorAll('.num').forEach(b=>b.classList.toggle('selected',selecionados.includes(Number(b.textContent))));
- document.getElementById('contagem').textContent=selecionados.length+' número(s) selecionado(s).';
+
+    document
+        .querySelectorAll('.num')
+        .forEach(b => {
+
+            b.classList.toggle(
+                'selected',
+                selecionados.includes(
+                    Number(b.textContent)
+                )
+            );
+
+        });
+
+    document.getElementById('contagem')
+        .textContent =
+        selecionados.length +
+        ' número(s) selecionado(s).';
 }
-function limpar(){selecionados=[];atualizarSelecao()}
+
+
+/* =========================
+   LIMPAR
+========================= */
+
+function limpar(){
+
+    selecionados = [];
+
+    atualizarSelecao();
+}
+
+
+/* =========================
+   GERAR ALEATÓRIO
+========================= */
+
 function gerar(){
- let q=Number(document.getElementById('quantidade').value);
- if(!Number.isInteger(q)||q<15||q>20){alert('Escolha entre 15 e 20 números.');return}
- const todos=Array.from({length:25},(_,i)=>i+1);
- todos.sort(()=>Math.random()-.5);
- selecionados=todos.slice(0,q).sort((a,b)=>a-b);atualizarSelecao();
+
+    const q =
+        Number(
+            document.getElementById('quantidade').value
+        );
+
+    if(
+        !Number.isInteger(q) ||
+        q < 15 ||
+        q > 20
+    ){
+
+        alert(
+            'Escolha entre 15 e 20 números.'
+        );
+
+        return;
+    }
+
+    const todos =
+        Array.from(
+            {length:25},
+            (_,i) => i + 1
+        );
+
+    todos.sort(
+        () => Math.random() - 0.5
+    );
+
+    selecionados =
+        todos
+        .slice(0,q)
+        .sort((a,b) => a-b);
+
+    atualizarSelecao();
 }
+
+
+/* =========================
+   SALVAR JOGO
+========================= */
+
 function salvar(){
- if(selecionados.length<15){alert('Selecione pelo menos 15 números.');return}
- jogos.push({numeros:[...selecionados].sort((a,b)=>a-b),data:new Date().toLocaleDateString('pt-BR')});
- localStorage.setItem(chaveJogos,JSON.stringify(jogos));mostrarJogos();
+
+    if(selecionados.length < 15){
+
+        alert(
+            'Selecione pelo menos 15 números.'
+        );
+
+        return;
+    }
+
+    jogos.push({
+
+        numeros:
+            [...selecionados]
+            .sort((a,b) => a-b),
+
+        data:
+            new Date()
+            .toLocaleDateString('pt-BR')
+
+    });
+
+    localStorage.setItem(
+        chaveJogos,
+        JSON.stringify(jogos)
+    );
+
+    mostrarJogos();
 }
+
+
+/* =========================
+   MOSTRAR JOGOS
+========================= */
+
 function mostrarJogos(){
- const el=document.getElementById('jogos');
- if(!jogos.length){el.textContent='Nenhum jogo salvo ainda.';return}
- el.innerHTML='';
- jogos.forEach((j,i)=>{
-  const p=document.createElement('p');
-  p.textContent='Jogo '+(i+1)+' ('+j.data+'): '+j.numeros.map(n=>String(n).padStart(2,'0')).join(' - ');
-  const b=document.createElement('button');b.className='action secondary';b.textContent='Excluir';
-  b.onclick=()=>{jogos.splice(i,1);localStorage.setItem(chaveJogos,JSON.stringify(jogos));mostrarJogos()};
-  p.appendChild(document.createElement('br'));p.appendChild(b);el.appendChild(p);
- });
+
+    const el =
+        document.getElementById('jogos');
+
+    if(!jogos.length){
+
+        el.textContent =
+            'Nenhum jogo salvo ainda.';
+
+        return;
+    }
+
+    el.innerHTML = '';
+
+    jogos.forEach((j,i) => {
+
+        const p =
+            document.createElement('p');
+
+        p.textContent =
+            'Jogo ' +
+            (i+1) +
+            ' (' +
+            j.data +
+            '): ' +
+            j.numeros
+            .map(
+                n => String(n).padStart(2,'0')
+            )
+            .join(' - ');
+
+        const b =
+            document.createElement('button');
+
+        b.className =
+            'action secondary';
+
+        b.textContent =
+            'Excluir';
+
+        b.onclick = () => {
+
+            jogos.splice(i,1);
+
+            localStorage.setItem(
+                chaveJogos,
+                JSON.stringify(jogos)
+            );
+
+            mostrarJogos();
+
+        };
+
+        p.appendChild(
+            document.createElement('br')
+        );
+
+        p.appendChild(b);
+
+        el.appendChild(p);
+
+    });
 }
+
+
+/* =========================
+   LER NÚMEROS
+========================= */
+
 function lerNumeros(valor){
- return valor.split(/[\s,;.-]+/).filter(Boolean).map(Number);
+
+    return valor
+        .split(/[\s,;.-]+/)
+        .filter(Boolean)
+        .map(Number);
+
 }
+
+
+/* =========================
+   VALIDAR RESULTADO
+========================= */
+
 function validarResultado(valor){
- const nums=lerNumeros(valor);
- return nums.length===15&&nums.every(n=>Number.isInteger(n)&&n>=1&&n<=25)&&new Set(nums).size===15?nums:null;
+
+    const nums =
+        lerNumeros(valor);
+
+    return (
+
+        nums.length === 15 &&
+
+        nums.every(
+            n =>
+                Number.isInteger(n) &&
+                n >= 1 &&
+                n <= 25
+        ) &&
+
+        new Set(nums).size === 15
+
+    )
+    ? nums
+    : null;
 }
+
+
+/* =========================
+   CONFERIR JOGOS
+========================= */
+
 function conferir(){
- const resultado=validarResultado(document.getElementById('resultado').value);
- const el=document.getElementById('conferencia');el.innerHTML='';
- if(!resultado){el.textContent='Digite exatamente 15 números diferentes, entre 01 e 25.';return}
- if(!jogos.length){el.textContent='Salve um jogo antes de conferir.';return}
- jogos.forEach((j,i)=>{
-  const acertos=j.numeros.filter(n=>resultado.includes(n)).length;
-  const p=document.createElement('p');p.textContent='Jogo '+(i+1)+': '+acertos+' acerto(s).';el.appendChild(p);
- });
+
+    const resultado =
+        validarResultado(
+            document.getElementById(
+                'resultado'
+            ).value
+        );
+
+    const el =
+        document.getElementById(
+            'conferencia'
+        );
+
+    el.innerHTML = '';
+
+    if(!resultado){
+
+        el.textContent =
+            'Digite exatamente 15 números diferentes, entre 01 e 25.';
+
+        return;
+    }
+
+    if(!jogos.length){
+
+        el.textContent =
+            'Salve um jogo antes de conferir.';
+
+        return;
+    }
+
+    jogos.forEach((j,i) => {
+
+        const acertos =
+            j.numeros.filter(
+                n => resultado.includes(n)
+            ).length;
+
+        const p =
+            document.createElement('p');
+
+        p.textContent =
+            'Jogo ' +
+            (i+1) +
+            ': ' +
+            acertos +
+            ' acerto(s).';
+
+        el.appendChild(p);
+
+    });
 }
+
+
+/* =========================
+   ADICIONAR HISTÓRICO
+========================= */
+
 function adicionarHistorico(){
- const nums=validarResultado(document.getElementById('historico').value);
- if(!nums){alert('Informe exatamente 15 números diferentes entre 01 e 25.');return}
- historico.push(nums);localStorage.setItem(chaveHistorico,JSON.stringify(historico));
- document.getElementById('historico').value='';mostrarFrequencia();
+
+    const nums =
+        validarResultado(
+            document.getElementById(
+                'historico'
+            ).value
+        );
+
+    if(!nums){
+
+        alert(
+            'Informe exatamente 15 números diferentes entre 01 e 25.'
+        );
+
+        return;
+    }
+
+    historico.push(nums);
+
+    localStorage.setItem(
+        chaveHistorico,
+        JSON.stringify(historico)
+    );
+
+    document.getElementById(
+        'historico'
+    ).value = '';
+
+    mostrarFrequencia();
 }
+
+
+/* =========================
+   MOSTRAR FREQUÊNCIA
+========================= */
+
 function mostrarFrequencia(){
- const cont=Array(26).fill(0);
- historico.forEach(sorteio=>sorteio.forEach(n=>cont[n]++));
- const el=document.getElementById('frequencia');
- if(!historico.length){el.textContent='Adicione resultados para ver as frequências.';return}
- const ordem=Array.from({length:25},(_,i)=>i+1).sort((a,b)=>cont[b]-cont[a]||a-b);
- el.textContent='Resultados cadastrados: '+historico.length;
- ordem.forEach(n=>{
-  const span=document.createElement('span');span.className='tag';
-  span.textContent=String(n).padStart(2,'0')+': '+cont[n]+' vez(es)';el.appendChild(span);
- });
+
+    const cont =
+        Array(26).fill(0);
+
+    historico.forEach(
+        sorteio =>
+            sorteio.forEach(
+                n => cont[n]++
+            )
+    );
+
+    const el =
+        document.getElementById(
+            'frequencia'
+        );
+
+    el.innerHTML = '';
+
+    if(!historico.length){
+
+        el.textContent =
+            'Adicione resultados para ver as frequências.';
+
+        return;
+    }
+
+    const titulo =
+        document.createElement('p');
+
+    titulo.textContent =
+        'Resultados cadastrados: ' +
+        historico.length;
+
+    el.appendChild(titulo);
+
+    const ordem =
+        Array.from(
+            {length:25},
+            (_,i) => i+1
+        )
+        .sort(
+            (a,b) =>
+                cont[b] - cont[a] ||
+                a - b
+        );
+
+    ordem.forEach(n => {
+
+        const span =
+            document.createElement('span');
+
+        span.className =
+            'tag';
+
+        span.textContent =
+            String(n).padStart(2,'0') +
+            ': ' +
+            cont[n] +
+            ' vez(es)';
+
+        el.appendChild(span);
+
+    });
 }
-montarGrade();mostrarJogos();mostrarFrequencia();
+
+
+/* =========================
+   RESULTADO REAL DA LOTOFÁCIL
+========================= */
+
+async function carregarResultadoReal(){
+
+    const el =
+        document.getElementById(
+            'resultadoReal'
+        );
+
+    el.innerHTML =
+        '<div class="loading">🔄 Consultando resultado...</div>';
+
+    try{
+
+        const resposta =
+            await fetch(
+                'https://servicebus2.caixa.gov.br/portaldeloterias/api/lotofacil'
+            );
+
+        if(!resposta.ok){
+
+            throw new Error(
+                'Não foi possível consultar a fonte.'
+            );
+        }
+
+        const dados =
+            await resposta.json();
+
+        const numeros =
+            dados.listaDezenas ||
+            dados.dezenasSorteadasOrdemSorteio ||
+            [];
+
+        if(!numeros.length){
+
+            throw new Error(
+                'Os números do resultado não foram encontrados.'
+            );
+        }
+
+        const concurso =
+            dados.numero ||
+            dados.numeroConcurso ||
+            '—';
+
+        const data =
+            dados.dataApuracao ||
+            dados.dataApuracaoFormatada ||
+            '—';
+
+        el.innerHTML = '';
+
+        const titulo =
+            document.createElement('h3');
+
+        titulo.textContent =
+            'Concurso ' + concurso;
+
+        el.appendChild(titulo);
+
+        const dataTexto =
+            document.createElement('p');
+
+        dataTexto.className =
+            'small';
+
+        dataTexto.textContent =
+            'Data do sorteio: ' + data;
+
+        el.appendChild(dataTexto);
+
+        const status =
+            document.createElement('div');
+
+        status.className =
+            'status sucesso';
+
+        status.textContent =
+            '✅ Resultado obtido da fonte de resultados da CAIXA.';
+
+        el.appendChild(status);
+
+        const grade =
+            document.createElement('div');
+
+        grade.className =
+            'resultado-numeros';
+
+        numeros
+            .map(Number)
+            .sort((a,b) => a-b)
+            .forEach(n => {
+
+                const numero =
+                    document.createElement('div');
+
+                numero.className =
+                    'resultado-numero';
+
+                numero.textContent =
+                    String(n).padStart(2,'0');
+
+                grade.appendChild(numero);
+
+            });
+
+        el.appendChild(grade);
+
+    }
+
+    catch(erro){
+
+        console.error(erro);
+
+        el.innerHTML = '';
+
+        const mensagem =
+            document.createElement('div');
+
+        mensagem.className =
+            'status erro';
+
+        mensagem.innerHTML =
+            '⚠️ Não foi possível carregar o resultado automaticamente.<br><br>' +
+            'Isso pode acontecer porque a fonte de dados bloqueou a consulta direta pelo navegador.';
+
+        el.appendChild(mensagem);
+
+        const tentativa =
+            document.createElement('p');
+
+        tentativa.className =
+            'small';
+
+        tentativa.textContent =
+            'Clique em "Atualizar resultado" para tentar novamente.';
+
+        el.appendChild(tentativa);
+
+    }
+
+}
+
+
+/* =========================
+   INICIALIZAÇÃO
+========================= */
+
+montarGrade();
+
+mostrarJogos();
+
+mostrarFrequencia();
+
+carregarResultadoReal();
+
 </script>
+
 </body>
 </html>
