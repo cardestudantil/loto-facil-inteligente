@@ -102,12 +102,13 @@ input{
 }
 
 .tag{
-    display:inline-block;
+    display:block;
+    width:max-content;
     background:#334155;
     color:#ffffff;
     border-radius:8px;
     padding:7px 10px;
-    margin:4px;
+    margin:6px 0;
     font-size:14px;
 }
 
@@ -146,6 +147,17 @@ input{
 
 .sucesso{
     color:#86efac;
+}
+
+.copiar-area{
+    background:#0f172a;
+    border:1px solid #475569;
+    border-radius:10px;
+    padding:12px;
+    margin-top:15px;
+    font-weight:bold;
+    line-height:1.6;
+    word-break:break-word;
 }
 </style>
 </head>
@@ -187,7 +199,7 @@ input{
     </button>
 
     <button class="action secondary" onclick="limpar()">
-        Limpar seleção
+        🧹 Limpar seleção
     </button>
 
     <button class="action" onclick="salvar()">
@@ -215,7 +227,7 @@ input{
     <h2>✅ Conferir resultado</h2>
 
     <p class="small">
-        Digite os 15 números sorteados, separados por vírgula ou espaço.
+        Digite ou cole os 15 números sorteados, separados por vírgula, espaço ou hífen.
     </p>
 
     <input
@@ -224,7 +236,7 @@ input{
     >
 
     <button class="action" onclick="conferir()">
-        Conferir meus jogos
+        ✅ Conferir meus jogos
     </button>
 
     <div id="conferencia" class="result"></div>
@@ -249,7 +261,7 @@ input{
         class="action"
         onclick="adicionarHistorico()"
     >
-        Adicionar resultado ao histórico
+        ➕ Adicionar resultado ao histórico
     </button>
 
     <div id="frequencia" class="result"></div>
@@ -269,8 +281,22 @@ input{
 
     </div>
 
-    <button class="action" onclick="copiarResultadoReal()">
+    <div id="resultadoCopiar" class="copiar-area">
+        Aguardando resultado...
+    </div>
+
+    <button
+        class="action"
+        onclick="copiarResultadoReal()"
+    >
         📋 Copiar resultado
+    </button>
+
+    <button
+        class="action secondary"
+        onclick="carregarResultadoReal()"
+    >
+        🔄 Atualizar resultado
     </button>
 
 </section>
@@ -302,6 +328,8 @@ let jogos = JSON.parse(
 let historico = JSON.parse(
     localStorage.getItem(chaveHistorico) || '[]'
 );
+
+let ultimoResultado = [];
 
 
 /* =========================
@@ -484,6 +512,8 @@ function salvar(){
     );
 
     mostrarJogos();
+
+    alert('✅ Jogo salvo com sucesso!');
 }
 
 
@@ -530,18 +560,22 @@ function mostrarJogos(){
             'action secondary';
 
         b.textContent =
-            'Excluir';
+            '🗑️ Excluir';
 
         b.onclick = () => {
 
-            jogos.splice(i,1);
+            if(confirm('Deseja excluir este jogo?')){
 
-            localStorage.setItem(
-                chaveJogos,
-                JSON.stringify(jogos)
-            );
+                jogos.splice(i,1);
 
-            mostrarJogos();
+                localStorage.setItem(
+                    chaveJogos,
+                    JSON.stringify(jogos)
+                );
+
+                mostrarJogos();
+
+            }
 
         };
 
@@ -646,7 +680,7 @@ function conferir(){
             document.createElement('p');
 
         p.textContent =
-            'Jogo ' +
+            '🎯 Jogo ' +
             (i+1) +
             ': ' +
             acertos +
@@ -692,6 +726,8 @@ function adicionarHistorico(){
     ).value = '';
 
     mostrarFrequencia();
+
+    alert('✅ Resultado adicionado ao histórico!');
 }
 
 
@@ -730,7 +766,7 @@ function mostrarFrequencia(){
         document.createElement('p');
 
     titulo.textContent =
-        'Resultados cadastrados: ' +
+        '📊 Resultados cadastrados: ' +
         historico.length;
 
     el.appendChild(titulo);
@@ -748,11 +784,19 @@ function mostrarFrequencia(){
 
     ordem.forEach(n => {
 
-       const span=document.createElement('span');
-span.className='tag';
-span.textContent=String(n).padStart(2,'0')+': '+cont[n]+' vez(es)';
-el.appendChild(span);
-el.appendChild(document.createTextNode(' '));
+        const span =
+            document.createElement('span');
+
+        span.className =
+            'tag';
+
+        span.textContent =
+            String(n).padStart(2,'0') +
+            ': ' +
+            cont[n] +
+            ' vez(es)';
+
+        el.appendChild(span);
 
     });
 }
@@ -769,8 +813,18 @@ async function carregarResultadoReal(){
             'resultadoReal'
         );
 
+    const copiar =
+        document.getElementById(
+            'resultadoCopiar'
+        );
+
     el.innerHTML =
         '<div class="loading">🔄 Consultando resultado...</div>';
+
+    copiar.textContent =
+        'Aguardando resultado...';
+
+    ultimoResultado = [];
 
     try{
 
@@ -800,6 +854,11 @@ async function carregarResultadoReal(){
                 'Os números do resultado não foram encontrados.'
             );
         }
+
+        ultimoResultado =
+            numeros
+            .map(Number)
+            .sort((a,b) => a-b);
 
         const concurso =
             dados.numero ||
@@ -849,25 +908,30 @@ async function carregarResultadoReal(){
         grade.className =
             'resultado-numeros';
 
-        numeros
-            .map(Number)
-            .sort((a,b) => a-b)
-            .forEach(n => {
+        ultimoResultado.forEach(n => {
 
-                const numero =
-                    document.createElement('div');
+            const numero =
+                document.createElement('div');
 
-                numero.className =
-                    'resultado-numero';
+            numero.className =
+                'resultado-numero';
 
-                numero.textContent =
-                    String(n).padStart(2,'0');
+            numero.textContent =
+                String(n).padStart(2,'0');
 
-                grade.appendChild(numero);
+            grade.appendChild(numero);
 
-            });
+        });
 
         el.appendChild(grade);
+
+        const textoNumeros =
+            ultimoResultado
+            .map(n => String(n).padStart(2,'0'))
+            .join(', ');
+
+        copiar.textContent =
+            textoNumeros;
 
     }
 
@@ -889,16 +953,81 @@ async function carregarResultadoReal(){
 
         el.appendChild(mensagem);
 
-        const tentativa =
-            document.createElement('p');
+        copiar.textContent =
+            'Resultado indisponível.';
 
-        tentativa.className =
-            'small';
+    }
 
-        tentativa.textContent =
-            'Clique em "Atualizar resultado" para tentar novamente.';
+}
 
-        el.appendChild(tentativa);
+
+/* =========================
+   COPIAR RESULTADO
+========================= */
+
+async function copiarResultadoReal(){
+
+    if(
+        !ultimoResultado ||
+        ultimoResultado.length !== 15
+    ){
+
+        alert(
+            '⚠️ O resultado ainda não foi carregado.'
+        );
+
+        return;
+    }
+
+    const texto =
+        ultimoResultado
+        .map(n => String(n).padStart(2,'0'))
+        .join(', ');
+
+    try{
+
+        await navigator.clipboard.writeText(texto);
+
+        alert(
+            '✅ Resultado copiado!\n\nAgora vá em "Conferir resultado" e cole no campo.'
+        );
+
+    }
+
+    catch(erro){
+
+        const area =
+            document.createElement('textarea');
+
+        area.value = texto;
+
+        area.style.position = 'fixed';
+        area.style.left = '-9999px';
+
+        document.body.appendChild(area);
+
+        area.focus();
+        area.select();
+
+        try{
+
+            document.execCommand('copy');
+
+            alert(
+                '✅ Resultado copiado!\n\nAgora vá em "Conferir resultado" e cole no campo.'
+            );
+
+        }
+
+        catch(e){
+
+            alert(
+                'Não foi possível copiar automaticamente.'
+            );
+
+        }
+
+        document.body.removeChild(area);
 
     }
 
