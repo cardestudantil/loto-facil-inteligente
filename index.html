@@ -104,9 +104,11 @@ input{
 .tag{
     display:inline-block;
     background:#334155;
+    color:#ffffff;
     border-radius:8px;
-    padding:5px 9px;
+    padding:7px 10px;
     margin:4px;
+    font-size:14px;
 }
 
 .resultado-numeros{
@@ -749,19 +751,11 @@ function mostrarFrequencia(){
 
     ordem.forEach(n => {
 
-        const span =
-            document.createElement('span');
-
-        span.className =
-            'tag';
-
-        span.textContent =
-            String(n).padStart(2,'0') +
-            ': ' +
-            cont[n] +
-            ' vez(es)';
-
-        el.appendChild(span);
+       const span=document.createElement('span');
+span.className='tag';
+span.textContent=String(n).padStart(2,'0')+': '+cont[n]+' vez(es)';
+el.appendChild(span);
+el.appendChild(document.createTextNode(' '));
 
     });
 }
