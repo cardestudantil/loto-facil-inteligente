@@ -289,7 +289,7 @@ input{
         class="action"
         onclick="copiarResultadoReal()"
     >
-        📋 Copiar resultado
+        📋 Copiar resultado para conferir
     </button>
 
     <button
@@ -962,7 +962,7 @@ async function carregarResultadoReal(){
 
 
 /* =========================
-   COPIAR RESULTADO
+   COPIAR E PREENCHER RESULTADO
 ========================= */
 
 async function copiarResultadoReal(){
@@ -984,52 +984,71 @@ async function copiarResultadoReal(){
         .map(n => String(n).padStart(2,'0'))
         .join(', ');
 
+
+    /* COLOCA AUTOMATICAMENTE
+       NO CAMPO DE CONFERÊNCIA */
+
+    const campoResultado =
+        document.getElementById('resultado');
+
+    campoResultado.value = texto;
+
+
+    /* TENTA COPIAR PARA A ÁREA
+       DE TRANSFERÊNCIA */
+
     try{
 
         await navigator.clipboard.writeText(texto);
-
-        alert(
-            '✅ Resultado copiado!\n\nAgora vá em "Conferir resultado" e cole no campo.'
-        );
 
     }
 
     catch(erro){
 
-        const area =
-            document.createElement('textarea');
-
-        area.value = texto;
-
-        area.style.position = 'fixed';
-        area.style.left = '-9999px';
-
-        document.body.appendChild(area);
-
-        area.focus();
-        area.select();
-
         try{
+
+            const area =
+                document.createElement('textarea');
+
+            area.value = texto;
+
+            area.style.position = 'fixed';
+            area.style.left = '-9999px';
+
+            document.body.appendChild(area);
+
+            area.focus();
+            area.select();
 
             document.execCommand('copy');
 
-            alert(
-                '✅ Resultado copiado!\n\nAgora vá em "Conferir resultado" e cole no campo.'
-            );
+            document.body.removeChild(area);
 
         }
 
         catch(e){
 
-            alert(
-                'Não foi possível copiar automaticamente.'
-            );
+            /* Mesmo que copiar seja bloqueado,
+               o campo de conferência já foi preenchido. */
 
         }
 
-        document.body.removeChild(area);
-
     }
+
+
+    /* LEVA A TELA ATÉ O CAMPO */
+
+    campoResultado.scrollIntoView({
+        behavior:'smooth',
+        block:'center'
+    });
+
+    campoResultado.focus();
+
+
+    alert(
+        '✅ Resultado colocado no campo de conferência!\n\nAgora clique em "Conferir meus jogos".'
+    );
 
 }
 
